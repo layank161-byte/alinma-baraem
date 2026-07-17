@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>براعم الإنماء — بروتوتايب</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Cairo', sans-serif;
+  background: #0d1117;
+  color: #e6edf3;
+  padding-bottom: 80px;
+}
+
+/* ── Header ── */
+.header {
+  background: linear-gradient(160deg, #161f2e 0%, #0d1117 100%);
+  border-bottom: 2px solid #c9a22740;
+  padding: 36px 40px 28px;
+  text-align: center;
+}
+.header h1 { font-size: 2.8rem; font-weight: 900; color: #c9a227; margin-bottom: 6px; }
+.header p  { font-size: 1.05rem; color: #8b949e; }
+
+.legend {
+  display: flex; flex-wrap: wrap; gap: 16px;
+  justify-content: center; margin-top: 20px;
+}
+.leg {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.9rem; color: #cdd9e5; font-weight: 600;
+  background: #21262d; border: 1px solid #30363d;
+  border-radius: 20px; padding: 5px 14px;
+}
+.leg-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── Sections ── */
+.section {
+  padding: 40px 32px 0;
+}
+.sec-title {
+  display: flex; align-items: center; gap: 14px;
+  font-size: 1.3rem; font-weight: 900; margin-bottom: 28px;
+}
+.sec-num {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; font-weight: 900; color: #000; flex-shrink: 0;
+}
+.divider { height: 1px; background: #21262d; margin: 40px 32px 0; }
+
+/* ── Flow row ── */
+.flow-row {
+  display: flex; align-items: flex-start; justify-content: center;
+  gap: 0; flex-wrap: wrap;
+}
+
+/* ── Phone ── */
+.phone-block {
+  display: flex; flex-direction: column; align-items: center;
+}
+.phone-name {
+  font-size: 1rem; font-weight: 800; margin-bottom: 10px;
+  text-align: center; max-width: 200px; line-height: 1.4;
+}
+.phone-frame {
+  width: 200px; height: 400px;
+  border-radius: 28px; overflow: hidden;
+  border: 3px solid #30363d;
+  background: #000;
+  box-shadow: 0 8px 32px rgba(0,0,0,.7);
+  cursor: pointer; position: relative;
+  transition: transform .18s, border-color .18s, box-shadow .18s;
+  flex-shrink: 0;
+}
+.phone-frame:hover {
+  transform: translateY(-5px) scale(1.03);
+  border-color: #c9a227;
+  box-shadow: 0 16px 48px rgba(201,162,39,.3);
+}
+.phone-frame img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: top center; display: block;
+}
+.phone-badge {
+  position: absolute; top: -10px; right: -10px;
+  width: 30px; height: 30px; border-radius: 50%;
+  font-size: 0.8rem; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  color: #000; z-index: 5; border: 2px solid #0d1117;
+}
+.phone-hint {
+  font-size: 0.82rem; color: #8b949e; text-align: center;
+  margin-top: 10px; max-width: 200px; line-height: 1.5;
+}
+
+/* ── Horizontal arrow ── */
+.h-arrow {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 0 6px; margin-top: 56px; /* align to phone mid */
+  gap: 6px; min-width: 90px;
+}
+.h-arrow-label {
+  font-size: 0.8rem; font-weight: 800;
+  padding: 4px 12px; border-radius: 14px;
+  color: #fff; text-align: center; white-space: nowrap;
+}
+.h-line-wrap {
+  display: flex; align-items: center; width: 100%;
+}
+.h-line { height: 3px; flex: 1; border-radius: 2px; }
+.h-head {
+  width: 0; height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+}
+/* RTL: arrow points left (toward the destination on the left) */
+.h-head-l { border-right: 12px solid; }
+
+/* ── Vertical arrow ── */
+.v-arrow {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 4px; padding: 6px 0;
+}
+.v-line { width: 3px; height: 36px; border-radius: 2px; }
+.v-head {
+  width: 0; height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+}
+.v-head-d { border-top: 12px solid; }
+.v-arrow-label {
+  font-size: 0.78rem; font-weight: 800;
+  padding: 3px 10px; border-radius: 12px;
+  color: #fff; text-align: center; white-space: nowrap;
+}
+
+/* Branch connector (from one phone to many below) */
+.branch-wrap {
+  display: flex; flex-direction: column; align-items: center; gap: 0;
+}
+.branch-top { display: flex; align-items: flex-start; justify-content: center; gap: 0; }
+
+/* Colors */
+.bg-gold   { background: #b8860b; }
+.bg-green  { background: #15803d; }
+.bg-blue   { background: #1d4ed8; }
+.bg-purple { background: #7c3aed; }
+.bg-red    { background: #b91c1c; }
+.bg-teal   { background: #0f766e; }
+.bg-orange { background: #c2410c; }
+.bg-pink   { background: #9d174d; }
+
+.col-gold   { color: #f0c84a; }
+.col-green  { color: #4ade80; }
+.col-blue   { color: #60a5fa; }
+.col-purple { color: #a78bfa; }
+.col-red    { color: #f87171; }
+.col-teal   { color: #2dd4bf; }
+.col-orange { color: #fb923c; }
+
+.line-gold   { background: #f0c84a; }
+.line-green  { background: #4ade80; }
+.line-blue   { background: #60a5fa; }
+.line-purple { background: #a78bfa; }
+.line-red    { background: #f87171; }
+.line-teal   { background: #2dd4bf; }
+.line-orange { background: #fb923c; }
+
+.head-gold   { border-right-color: #f0c84a; }
+.head-green  { border-right-color: #4ade80; }
+.head-blue   { border-right-color: #60a5fa; }
+.head-purple { border-right-color: #a78bfa; }
+.head-red    { border-right-color: #f87171; }
+.head-teal   { border-right-color: #2dd4bf; }
+.head-orange { border-right-color: #fb923c; }
+
+.vhead-gold   { border-top-color: #f0c84a; }
+.vhead-green  { border-top-color: #4ade80; }
+.vhead-blue   { border-top-color: #60a5fa; }
+.vhead-purple { border-top-color: #a78bfa; }
+.vhead-red    { border-top-color: #f87171; }
+.vhead-teal   { border-top-color: #2dd4bf; }
+.vhead-orange { border-top-color: #fb923c; }
+
+/* ── Card group ── */
+.card-group {
+  background: #161b22; border: 2px solid #21262d;
+  border-radius: 20px; padding: 24px 20px 20px;
+  position: relative;
+}
+.card-group-title {
+  position: absolute; top: -14px; right: 20px;
+  font-size: 0.82rem; font-weight: 800;
+  padding: 3px 14px; border-radius: 12px; color: #fff;
+}
+
+/* ── Modal ── */
+.modal-bg {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.9); z-index: 999;
+  align-items: center; justify-content: center;
+  flex-direction: column; gap: 12px;
+}
+.modal-bg.open { display: flex; }
+.modal-bg img {
+  max-height: 88vh; max-width: 400px; width: 100%;
+  border-radius: 32px; box-shadow: 0 20px 80px rgba(0,0,0,.9);
+  object-fit: contain;
+}
+.modal-title {
+  font-size: 1rem; font-weight: 700; color: #c9a227;
+  background: #161b22; border: 1px solid #30363d;
+  border-radius: 12px; padding: 8px 24px;
+}
+.modal-close {
+  position: absolute; top: 16px; left: 16px;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: #21262d; border: 1px solid #30363d;
+  color: #fff; font-size: 1.4rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ── Fan layout for "from menu" ── */
+.fan {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  justify-content: center; margin-top: 0;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════ HEADER ════ -->
+<div class="header">
+  <h1>🌱 براعم الإنماء — تدفق التطبيق</h1>
+  <p>اضغط على أي شاشة لتكبيرها · كل سهم يوضح الزر الذي يفتح الشاشة التالية</p>
+  <div class="legend">
+    <div class="leg"><div class="leg-dot" style="background:#f0c84a"></div>التنقل الرئيسي</div>
+    <div class="leg"><div class="leg-dot" style="background:#60a5fa"></div>حساب فيصل (18 سنة)</div>
+    <div class="leg"><div class="leg-dot" style="background:#a78bfa"></div>حساب سارة (14 سنة)</div>
+    <div class="leg"><div class="leg-dot" style="background:#4ade80"></div>القائمة الجانبية</div>
+    <div class="leg"><div class="leg-dot" style="background:#f87171"></div>التنبيهات</div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════
+     ① الدخول للتطبيق
+════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="sec-title">
+    <div class="sec-num bg-gold">١</div>
+    <span>الدخول للتطبيق</span>
+  </div>
+
+  <div class="flow-row">
+
+    <!-- Splash -->
+    <div class="phone-block">
+      <div class="phone-name col-gold">شاشة البداية</div>
+      <div class="phone-frame" style="background:linear-gradient(160deg,#0d2137,#1a4060);"
+           onclick="zoom('','شاشة البداية')">
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;padding:24px;text-align:center;">
+          <div style="font-size:4rem;">🌱</div>
+          <div style="font-size:1.2rem;font-weight:900;color:#f0c84a;">براعم الإنماء</div>
+          <div style="font-size:0.75rem;color:#94a3b8;margin-bottom:8px;">بنك يكبر مع طفلك</div>
+          <div style="background:#c9a227;color:#000;border-radius:24px;padding:10px 22px;font-size:0.9rem;font-weight:800;">ابدأ برحلة طفلك ←</div>
+        </div>
+        <div class="phone-badge bg-gold">S</div>
+      </div>
+      <div class="phone-hint">شاشة الترحيب<br>عند فتح الرابط لأول مرة</div>
+    </div>
+
+    <!-- Arrow -->
+    <div class="h-arrow">
+      <div class="h-arrow-label bg-gold">اضغط "ابدأ برحلة طفلك"</div>
+      <div class="h-line-wrap">
+        <div class="h-line line-gold" style="width:80px;"></div>
+        <div class="h-head h-head-l head-gold"></div>
+      </div>
+    </div>
+
+    <!-- Home -->
+    <div class="phone-block">
+      <div class="phone-name col-gold">الشاشة الرئيسية<br>لوحة ولي الأمر</div>
+      <div class="phone-frame" onclick="zoom('screens/s01-home.jpg','الشاشة الرئيسية — لوحة ولي الأمر محمد')">
+        <img src="screens/s01-home.jpg" alt="الشاشة الرئيسية">
+        <div class="phone-badge bg-gold">١</div>
+      </div>
+      <div class="phone-hint">قائمة الأبناء (أحمد · سارة · فيصل)<br>+ حصالة البطل الحالي</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+
+<!-- ════════════════════════════════════════════════
+     ② من الشاشة الرئيسية
+════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="sec-title">
+    <div class="sec-num bg-gold">٢</div>
+    <span>الأزرار الرئيسية في الشاشة الرئيسية</span>
+  </div>
+
+  <!-- Row: 5 destinations from main -->
+  <div class="fan">
+
+    <!-- Notifications -->
+    <div class="phone-block">
+      <div class="v-arrow">
+        <div class="v-arrow-label bg-red">🔔 أيقونة الجرس</div>
+        <div class="v-line vline-red" style="background:#f87171;"></div>
+        <div class="v-head v-head-d vhead-red"></div>
+      </div>
+      <div class="phone-name col-red">التنبيهات</div>
+      <div class="phone-frame" onclick="zoom('screens/s15-notifications.jpg','التنبيهات — طلبات الموافقة على الشراء')">
+        <img src="screens/s15-notifications.jpg" alt="التنبيهات">
+        <div class="phone-badge bg-red">٢</div>
+      </div>
+      <div class="phone-hint">طلبات شراء من سارة<br>جرير 120 ر.س · نون 85.5 ر.س<br>موافق / رفض</div>
+    </div>
+
+    <!-- Side Menu -->
+    <div class="phone-block">
+      <div class="v-arrow">
+        <div class="v-arrow-label bg-green">≡ أيقونة القائمة</div>
+        <div class="v-line" style="background:#4ade80;"></div>
+        <div class="v-head v-head-d vhead-green"></div>
+      </div>
+      <div class="phone-name col-green">القائمة الجانبية</div>
+      <div class="phone-frame" onclick="zoom('screens/s09-menu.jpg','القائمة الجانبية — كل الأقسام')">
+        <img src="screens/s09-menu.jpg" alt="القائمة">
+        <div class="phone-badge bg-green">٣</div>
+      </div>
+      <div class="phone-hint">الحصالة · AI · سجل عمليات<br>ثقافة مالية · استثمار · مشرفون</div>
+    </div>
+
+    <!-- Faisal -->
+    <div class="phone-block">
+      <div class="v-arrow">
+        <div class="v-arrow-label bg-blue">🦁 اختيار فيصل من القائمة</div>
+        <div class="v-line" style="background:#60a5fa;"></div>
+        <div class="v-head v-head-d vhead-blue"></div>
+      </div>
+      <div class="phone-name col-blue">حساب فيصل<br>(18 سنة)</div>
+      <div class="phone-frame" onclick="zoom('screens/s03-faisal-account.jpg','حساب فيصل — محفظتي الادخار والصرف + بوابة الترقية')">
+        <img src="screens/s03-faisal-account.jpg" alt="حساب فيصل">
+        <div class="phone-badge bg-blue">٤</div>
+      </div>
+      <div class="phone-hint">محفظة الادخار 2,400 ر.س<br>محفظة الصرف 450 ر.س<br>+ بوابة الترقية والاستقلال</div>
+    </div>
+
+    <!-- Sara AI -->
+    <div class="phone-block">
+      <div class="v-arrow">
+        <div class="v-arrow-label bg-purple">🌸 اختيار سارة من القائمة</div>
+        <div class="v-line" style="background:#a78bfa;"></div>
+        <div class="v-head v-head-d vhead-purple"></div>
+      </div>
+      <div class="phone-name col-purple">مساعد الذكاء الاصطناعي<br>(لسارة)</div>
+      <div class="phone-frame" onclick="zoom('screens/s10-ai.jpg','مساعد الإنماء الذكي — تحليل مالي لسارة')">
+        <img src="screens/s10-ai.jpg" alt="AI">
+        <div class="phone-badge bg-purple">٥</div>
+      </div>
+      <div class="phone-hint">تحليل مالي مخصص<br>لكل ابن بشكل منفرد<br>يسألك ويساعدك</div>
+    </div>
+
+    <!-- New Child -->
+    <div class="phone-block">
+      <div class="v-arrow">
+        <div class="v-arrow-label bg-orange">➕ إضافة ابن جديد</div>
+        <div class="v-line" style="background:#fb923c;"></div>
+        <div class="v-head v-head-d vhead-orange"></div>
+      </div>
+      <div class="phone-name col-orange">فتح حساب جديد</div>
+      <div class="phone-frame" onclick="zoom('screens/s16-new-account.jpg','فتح حساب لبراعمك الجديد — التحقق عبر نفاذ')">
+        <img src="screens/s16-new-account.jpg" alt="حساب جديد">
+        <div class="phone-badge bg-orange">٦</div>
+      </div>
+      <div class="phone-hint">التحقق عبر تطبيق نفاذ<br>اسم + تاريخ ميلاد الطفل<br>رقم الهوية الوطنية</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+
+<!-- ════════════════════════════════════════════════
+     ③ حساب فيصل التفاصيل
+════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="sec-title">
+    <div class="sec-num bg-blue" style="color:#fff;">٣</div>
+    <span class="col-blue">من حساب فيصل (18 سنة) — ثلاثة أزرار</span>
+  </div>
+
+  <div class="flow-row" style="align-items:flex-start; gap:0;">
+
+    <!-- Faisal source -->
+    <div class="phone-block" style="margin-top:0;">
+      <div class="phone-name col-blue">حساب فيصل (٤)</div>
+      <div class="phone-frame" onclick="zoom('screens/s03-faisal-account.jpg','حساب فيصل التفصيلي')">
+        <img src="screens/s03-faisal-account.jpg" alt="فيصل">
+        <div class="phone-badge bg-blue">٤</div>
+      </div>
+    </div>
+
+    <!-- Arrows column -->
+    <div style="display:flex;flex-direction:column;gap:32px;justify-content:center;padding:0 12px;margin-top:80px;">
+
+      <div style="display:flex;align-items:center;gap:4px;">
+        <div style="height:3px;width:60px;background:#60a5fa;border-radius:2px;"></div>
+        <div style="width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-right:12px solid #60a5fa;"></div>
+        <span style="font-size:0.82rem;font-weight:800;color:#60a5fa;white-space:nowrap;margin-right:6px;">زر "بوابة الترقية والاستقلال المالي"</span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:4px;margin-top:16px;">
+        <div style="height:3px;width:60px;background:#4ade80;border-radius:2px;"></div>
+        <div style="width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-right:12px solid #4ade80;"></div>
+        <span style="font-size:0.82rem;font-weight:800;color:#4ade80;white-space:nowrap;margin-right:6px;">زر "إيداع للادخار ➕"</span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:4px;margin-top:16px;">
+        <div style="height:3px;width:60px;background:#a78bfa;border-radius:2px;"></div>
+        <div style="width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-right:12px solid #a78bfa;"></div>
+        <span style="font-size:0.82rem;font-weight:800;color:#a78bfa;white-space:nowrap;margin-right:6px;">زر "شحن الصرف ➕" (اختياري)</span>
+      </div>
+
+    </div>
+
+    <!-- Three destinations -->
+    <div style="display:flex;flex-direction:column;gap:28px;">
+
+      <!-- Independence -->
+      <div class="phone-block" style="flex-direction:row;align-items:center;gap:16px;">
+        <div class="phone-frame" style="width:190px;height:360px;" onclick="zoom('screens/s04-independence.jpg','بوابة الترقية والاستقلال المالي')">
+          <img src="screens/s04-independence.jpg" alt="الاستقلال">
+          <div class="phone-badge bg-blue">٧</div>
+        </div>
+        <div>
+          <div class="phone-name col-blue" style="margin-bottom:6px;text-align:right;">بوابة الترقية والاستقلال المالي</div>
+          <div class="phone-hint" style="text-align:right;">فيصل بلغ 18 سنة<br>إجمالي الادخار: 2,400 ر.س<br>إجمالي الصرف: 450 ر.س<br><strong style="color:#4ade80;">المجموع: 2,850 ر.س</strong><br>→ تفعيل الحساب المستقل</div>
+        </div>
+      </div>
+
+      <!-- Monthly Saving -->
+      <div class="phone-block" style="flex-direction:row;align-items:center;gap:16px;">
+        <div class="phone-frame" style="width:190px;height:360px;" onclick="zoom('screens/s05-monthly-saving.jpg','الاستقطاع والادخار الشهري الدوري')">
+          <img src="screens/s05-monthly-saving.jpg" alt="الادخار الشهري">
+          <div class="phone-badge bg-green">٨</div>
+        </div>
+        <div>
+          <div class="phone-name col-green" style="margin-bottom:6px;text-align:right;">الاستقطاع الشهري الدوري</div>
+          <div class="phone-hint" style="text-align:right;">يُحوَّل من حساب الوالد تلقائياً<br>المبلغ: 100 ر.س / شهر<br>يوم التنفيذ: 25 (يوم الراتب)<br>→ يُودع مباشرة في محفظة الادخار</div>
+        </div>
+      </div>
+
+      <!-- Financial Responsibility -->
+      <div class="phone-block" style="flex-direction:row;align-items:center;gap:16px;">
+        <div class="phone-frame" style="width:190px;height:360px;" onclick="zoom('screens/s06-financial-resp.jpg','مشاركة المسؤولية المالية (اختياري)')">
+          <img src="screens/s06-financial-resp.jpg" alt="المسؤولية المالية">
+          <div class="phone-badge bg-purple">٩</div>
+        </div>
+        <div>
+          <div class="phone-name col-purple" style="margin-bottom:6px;text-align:right;">مشاركة المسؤولية المالية</div>
+          <div class="phone-hint" style="text-align:right;">يختار الوالد نوع المصروف<br>(مثال: مصروف دراسي 100 ر.س)<br>نسبة مشاركة فيصل: 2%<br><strong style="color:#a78bfa;">= 2 ر.س يُخصم من محفظته</strong></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+
+<!-- ════════════════════════════════════════════════
+     ④ حساب سارة
+════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="sec-title">
+    <div class="sec-num bg-purple" style="color:#fff;">٤</div>
+    <span class="col-purple">من حساب سارة (14 سنة) — التحكم اليومي</span>
+  </div>
+
+  <div class="flow-row" style="gap:0; align-items:flex-start;">
+
+    <!-- Sara source: use notifications/AI as entry point indicator -->
+    <div class="phone-block">
+      <div class="phone-name col-purple">شاشة سارة<br>(بعد اختيارها من القائمة)</div>
+      <div class="phone-frame" onclick="zoom('screens/s10-ai.jpg','مساعد الذكاء الاصطناعي لسارة')">
+        <img src="screens/s10-ai.jpg" alt="سارة">
+        <div class="phone-badge bg-purple">٥</div>
+      </div>
+    </div>
+
+    <!-- Arrow -->
+    <div class="h-arrow" style="margin-top:80px;">
+      <div class="h-arrow-label bg-purple">زر "تعديل الحد اليومي"</div>
+      <div class="h-line-wrap">
+        <div class="h-line" style="background:#a78bfa;width:70px;"></div>
+        <div class="h-head h-head-l" style="border-right-color:#a78bfa;"></div>
+      </div>
+    </div>
+
+    <!-- Daily Limit -->
+    <div class="phone-block">
+      <div class="phone-name col-purple">إدارة الحد اليومي<br>وبطاقة الصرف الاستباقية</div>
+      <div class="phone-frame" onclick="zoom('screens/s08-daily-limit.jpg','إدارة الحد اليومي وبطاقة الصرف الاستباقية لسارة')">
+        <img src="screens/s08-daily-limit.jpg" alt="الحد اليومي">
+        <div class="phone-badge bg-purple">١٠</div>
+      </div>
+      <div class="phone-hint">
+        الحد المسموح: 100 ر.س / يوم<br>
+        تم صرف: 15 ر.س · متبقي: 85 ر.س<br>
+        <strong style="color:#4ade80;">بطاقة الصرف نشطة ✓</strong><br>
+        متاح: Apple Pay + شراء
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+
+<!-- ════════════════════════════════════════════════
+     ⑤ القائمة الجانبية
+════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="sec-title">
+    <div class="sec-num bg-green" style="color:#000;">٥</div>
+    <span class="col-green">من القائمة الجانبية — خمسة أقسام</span>
+  </div>
+
+  <!-- Source menu -->
+  <div style="display:flex;justify-content:center;margin-bottom:16px;">
+    <div class="phone-block">
+      <div class="phone-name col-green">القائمة الجانبية (٣)</div>
+      <div class="phone-frame" onclick="zoom('screens/s09-menu.jpg','القائمة الجانبية')">
+        <img src="screens/s09-menu.jpg" alt="القائمة">
+        <div class="phone-badge bg-green">٣</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fan of 5 destinations -->
+  <div class="fan">
+
+    <!-- Transaction Log -->
+    <div class="phone-block">
+      <div class="v-arrow">
+        <div class="v-arrow-label bg-green">سجل العمليات</div>
+        <div class="v-line" style="background:#4ade80;height:28px;"></div>
+        <div class="v-head v-head-d vhead-green"></div>
+      </div>
+      <div class="phone-name col-green" style="font-size:0.9rem;">سجل العمليات والرقابة</div>
+      <div class="phone-frame" onclick="zoom('screens/s11-transactions.jpg','سجل العمليات والرقابة')">
+        <img src="screens/s11-transactions.jpg" alt="سجل العمليات">
+        <div class="phone-badge bg-green">١١</div>
+      </div>
+      <div class="phone-hint">كل حركات الصرف والادخار<br>هدية النجاح من الأب +300 ر.س<br>توفير أسبوعي</div>
+    </div>
+
+    <!-- Financial Culture -->
+    <div class="phone-block">
+      <div class="v-arrow">
+        <div class="v-arrow-label bg-teal">ثقافة طفلك المالية</div>
+        <div class="v-line" style="background:#2dd4bf;height:28px;"></div>
+        <div class="v-head v-head-d vhead-teal"></div>
+      </div>
+      <div class="phone-name col-teal" style="font-size:0.9rem;">ثقافة طفلك المالية</div>
+      <div class="phone-frame" onclick="zoom('screens/s12-culture.jpg','ثقافة طفلك المالية — دروس مالية')">
+        <img src="screens/s12-culture.jpg" alt="الثقافة المالية">
+        <div class="phone-badge bg-teal">١٢</div>
+      </div>
+      <div class="phone-hint">دروس مالية تعليمية<br>قاعدة 50/30/20<br>للادخار والإنفاق والمتعة</div>
+    </div>
+
+    <!-- Investment -->
+    <div class="phone-block">
+      <div class="v-arrow">
+        <div class="v-arrow-label bg-purple">اختيار نوع الاستثمار</div>
+        <div class="v-line" style="background:#a78bfa;height:28px;"></div>
+        <div class="v-head v-head-d vhead-purple"></div>
+      </div>
+      <div class="phone-name col-purple" style="font-size:0.9rem;">استراتيجية الاستثمار</div>
+      <div class="phone-frame" onclick="zoom('screens/s13-investment.jpg','استراتيجية الاستثمار وتنمية المال')">
+        <img src="screens/s13-investment.jpg" alt="الاستثمار">
+        <div class="phone-badge bg-purple">١٣</div>
+      </div>
+      <div class="phone-hint">الاستثمار النقدي الآمن<br>(نمو مستقر - موصى به)<br>استثمار البلوك تشين<br>(عائد مرتفع - مخاطر عالية)</div>
+    </div>
+
+    <!-- Supervisors -->
+    <div class="phone-block">
+      <div class="v-arrow">
+        <div class="v-arrow-label bg-blue">المشرفون على الحساب</div>
+        <div class="v-line" style="background:#60a5fa;height:28px;"></div>
+        <div class="v-head v-head-d vhead-blue"></div>
+      </div>
+      <div class="phone-name col-blue" style="font-size:0.9rem;">المشرفون وأولياء الأمور</div>
+      <div class="phone-frame" onclick="zoom('screens/s14-supervisors.jpg','المشرفون وأولياء الأمور — إدارة الصلاحيات')">
+        <img src="screens/s14-supervisors.jpg" alt="المشرفون">
+        <div class="phone-badge bg-blue">١٤</div>
+      </div>
+      <div class="phone-hint">الأب (مالك) · الأم (مشرف كامل)<br>إضافة مشرف جديد<br>(أخ أكبر / قريب موثوق)</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════════
+     ملخص سريع
+════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="sec-title">
+    <div class="sec-num bg-gold">📋</div>
+    <span>ملخص — كل زر وين يوديك</span>
+  </div>
+
+  <div style="max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;">
+
+    <!-- Cards -->
+    <div style="background:#161b22;border:1px solid #30363d;border-radius:16px;padding:18px;">
+      <div style="font-size:1.4rem;margin-bottom:8px;">🔔</div>
+      <div style="font-weight:800;color:#f87171;margin-bottom:4px;">أيقونة الجرس</div>
+      <div style="font-size:0.85rem;color:#8b949e;line-height:1.6;">تفتح <strong style="color:#e6edf3;">التنبيهات</strong> — تشوف طلبات الشراء من أولادك وتوافق أو ترفض</div>
+    </div>
+
+    <div style="background:#161b22;border:1px solid #30363d;border-radius:16px;padding:18px;">
+      <div style="font-size:1.4rem;margin-bottom:8px;">≡</div>
+      <div style="font-weight:800;color:#4ade80;margin-bottom:4px;">أيقونة القائمة</div>
+      <div style="font-size:0.85rem;color:#8b949e;line-height:1.6;">تفتح <strong style="color:#e6edf3;">القائمة الجانبية</strong> — الحصالة، سجل العمليات، الثقافة المالية، الاستثمار، المشرفون</div>
+    </div>
+
+    <div style="background:#161b22;border:1px solid #30363d;border-radius:16px;padding:18px;">
+      <div style="font-size:1.4rem;margin-bottom:8px;">🦁</div>
+      <div style="font-weight:800;color:#60a5fa;margin-bottom:4px;">اختيار فيصل</div>
+      <div style="font-size:0.85rem;color:#8b949e;line-height:1.6;">يفتح <strong style="color:#e6edf3;">حساب فيصل</strong> — محافظه + بوابة الاستقلال المالي (بلغ 18 سنة)</div>
+    </div>
+
+    <div style="background:#161b22;border:1px solid #30363d;border-radius:16px;padding:18px;">
+      <div style="font-size:1.4rem;margin-bottom:8px;">🌸</div>
+      <div style="font-weight:800;color:#a78bfa;margin-bottom:4px;">اختيار سارة</div>
+      <div style="font-size:0.85rem;color:#8b949e;line-height:1.6;">يفتح <strong style="color:#e6edf3;">مساعد الذكاء الاصطناعي</strong> لسارة — تحليل مالي مخصص</div>
+    </div>
+
+    <div style="background:#161b22;border:1px solid #30363d;border-radius:16px;padding:18px;">
+      <div style="font-size:1.4rem;margin-bottom:8px;">➕</div>
+      <div style="font-weight:800;color:#fb923c;margin-bottom:4px;">إضافة ابن جديد</div>
+      <div style="font-size:0.85rem;color:#8b949e;line-height:1.6;">يفتح <strong style="color:#e6edf3;">فتح حساب جديد</strong> — التحقق عبر تطبيق نفاذ + بيانات الطفل</div>
+    </div>
+
+    <div style="background:#161b22;border:1px solid #30363d;border-radius:16px;padding:18px;">
+      <div style="font-size:1.4rem;margin-bottom:8px;">🛡️</div>
+      <div style="font-weight:800;color:#60a5fa;margin-bottom:4px;">بوابة الترقية والاستقلال</div>
+      <div style="font-size:0.85rem;color:#8b949e;line-height:1.6;">من حساب فيصل → تحويل <strong style="color:#e6edf3;">2,850 ر.س</strong> لحسابه الشخصي المستقل في بنك الإنماء</div>
+    </div>
+
+    <div style="background:#161b22;border:1px solid #30363d;border-radius:16px;padding:18px;">
+      <div style="font-size:1.4rem;margin-bottom:8px;">📅</div>
+      <div style="font-weight:800;color:#4ade80;margin-bottom:4px;">إيداع للادخار</div>
+      <div style="font-size:0.85rem;color:#8b949e;line-height:1.6;">يفتح <strong style="color:#e6edf3;">الاستقطاع الشهري</strong> — 100 ر.س تلقائي كل 25 من الشهر</div>
+    </div>
+
+    <div style="background:#161b22;border:1px solid #30363d;border-radius:16px;padding:18px;">
+      <div style="font-size:1.4rem;margin-bottom:8px;">💳</div>
+      <div style="font-weight:800;color:#a78bfa;margin-bottom:4px;">تعديل الحد اليومي (سارة)</div>
+      <div style="font-size:0.85rem;color:#8b949e;line-height:1.6;">يفتح <strong style="color:#e6edf3;">إدارة الحد اليومي</strong> — تحكم في سقف الإنفاق + إدارة بطاقة الصرف</div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══ MODAL ══ -->
+<div class="modal-bg" id="modal" onclick="if(event.target===this)closeZoom()">
+  <button class="modal-close" onclick="closeZoom()">✕</button>
+  <img id="mimg" src="" alt="">
+  <div class="modal-title" id="mcap"></div>
+</div>
+
+<script>
+function zoom(src, cap) {
+  if (!src) return;
+  document.getElementById('mimg').src = src;
+  document.getElementById('mcap').textContent = cap;
+  document.getElementById('modal').classList.add('open');
+}
+function closeZoom() {
+  document.getElementById('modal').classList.remove('open');
+}
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeZoom(); });
+</script>
+</body>
+</html>
